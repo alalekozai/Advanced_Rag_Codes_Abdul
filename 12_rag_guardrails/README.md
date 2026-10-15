@@ -42,6 +42,10 @@ uv run pytest            # 28 tests, no API key needed (fake retriever + LLM)
 uv run main.py           # real PDF + OpenAI, needs OPENAI_API_KEY in .env
 ```
 
+The same tests run on GitHub Actions for every push and pull request that
+touches this folder (`.github/workflows/guardrails-tests.yml`). A red check
+on a PR means a guardrail broke or a red-team case stopped being blocked.
+
 ## Red-team set
 
 `tests/redteam.yaml` holds attacks that must be blocked and normal questions

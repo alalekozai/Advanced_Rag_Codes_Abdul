@@ -1,0 +1,39 @@
+# Runs the 12_rag_guardrails test suite on every push and pull request
+# that touches that folder. No API key needed: the tests use a fake
+# retriever and a fake LLM.
+name: guardrails-tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "12_rag_guardrails/**"
+      - ".github/workflows/guardrails-tests.yml"
+  pull_request:
+    paths:
+      - "12_rag_guardrails/**"
+      - ".github/workflows/guardrails-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: 12_rag_guardrails
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run tests
+        run: uv run pytest -v
